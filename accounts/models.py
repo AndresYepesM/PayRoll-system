@@ -81,10 +81,11 @@ class Account(AbstractBaseUser):
         return True
 
 
-class Employee(models.Model):
+class Department(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     ssn = models.IntegerField(unique=True, verbose_name='Social security number')
     home_address = models.CharField(max_length=65, verbose_name='Home address')
+    salary = models.FloatField(default=0.0)
     office_address = models.CharField(max_length=150, verbose_name='Office address')
     role = models.CharField(max_length=20, choices=ROLE)
     sector = models.CharField(max_length=20, choices=SECTOR)
