@@ -44,7 +44,7 @@ def new_employee(request):
             form = UserRegistration(request.POST)
             if form.is_valid():
                 first_name = form.cleaned_data['first_name']
-                last_name= form.cleaned_data['first_name']
+                last_name= form.cleaned_data['last_name']
                 email = form.cleaned_data['email']
                 phone = form.cleaned_data['phone']
                 username = email.split("@")[0]

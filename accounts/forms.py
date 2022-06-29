@@ -72,5 +72,7 @@ class DesignateRole(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DesignateRole, self).__init__(*args, **kwargs)
+        self.fields['ssn'].widget.attrs['placeholder']='SSN'
+        self.fields['address'].widget.attrs['placeholder']='Address'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
