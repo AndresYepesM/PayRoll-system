@@ -54,7 +54,7 @@ class Account(AbstractBaseUser):
 
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
-    is_admin = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
@@ -84,9 +84,8 @@ class Account(AbstractBaseUser):
 class Department(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     ssn = models.IntegerField(unique=True, verbose_name='Social security number')
-    home_address = models.CharField(max_length=65, verbose_name='Home address')
+    address = models.CharField(max_length=65, verbose_name='Home address')
     salary = models.FloatField(default=0.0)
-    office_address = models.CharField(max_length=150, verbose_name='Office address')
     role = models.CharField(max_length=20, choices=ROLE)
     sector = models.CharField(max_length=20, choices=SECTOR)
 
