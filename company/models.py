@@ -4,6 +4,7 @@ from accounts.models import Account
 # Create your models here.
 
 class Enterprise(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=35)
