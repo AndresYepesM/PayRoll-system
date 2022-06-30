@@ -16,16 +16,32 @@
 
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#">List of Employees</a></li>
-                            <li><a class="dropdown-item" href="{% url 'new_employee' %}">Create a Employee</a></li>
+                            <li><a class="dropdown-item" href="{% url 'new_employee' %}">Create a new employee</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Roles
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">List of Roles</a></li>
+                            <li><a class="dropdown-item" href="{% url 'new_employee' %}">Create a new Role</a></li>
                         </ul>
                     </li>
                     {% endif %}
                 {% else %}
 
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_enterprise' %}">Register the company</a>
-                </li>
+
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register_enterprise' %}">Register the company</a>
+                    </li>
+                {% else %}
+
+                {% endif %}
             </ul>
 
             <div class="d-grid gap-2">

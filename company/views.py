@@ -35,9 +35,12 @@ def register_enterprise(request):
             enterprise.city = form.cleaned_data['city']
             enterprise.country = form.cleaned_data['country']
             enterprise.zipcode = form.cleaned_data['zipcode']
+
             username = enterprise.email.split('@')[0]
+            first_name = enterprise.name.split(' ')[0]
+            last_name = enterprise.name.split(' ')[1]
             password = hash(enterprise.email)
-            user = Account.objects.create_user(first_name=enterprise.name, last_name='LLC.', username=username, email=enterprise.email, password=str(password))
+            user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=enterprise.email, password=str(password))
             user.phone = enterprise.phone
             user.is_active = True
             user.is_admin = True
