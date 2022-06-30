@@ -10,5 +10,4 @@ urlpatterns = [
 
     path('new_employee/', new_employee, name='new_employee'),
 
-    path('designate_role/<int:user_id>/', designate_role, name='designate_role'),
 ]

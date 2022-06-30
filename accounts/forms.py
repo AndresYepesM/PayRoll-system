@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import BaseFormSet
-from .models import Account, Department
+from .models import Account
 
 class UserRegistration(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -54,25 +54,3 @@ class UserRegistration(forms.ModelForm):
                 raise forms.ValidationError('The Password need at least 8 characters')
         else:
             raise forms.ValidationError('The password not match please Try Again')
-
-
-class DesignateRole(forms.ModelForm):
-
-    class Meta:
-
-        model = Department
-
-        fields={
-            'ssn',
-            'address',
-            'salary',
-            'role',
-            'sector',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(DesignateRole, self).__init__(*args, **kwargs)
-        self.fields['ssn'].widget.attrs['placeholder']='SSN'
-        self.fields['address'].widget.attrs['placeholder']='Address'
-        for field in self.fields:
-            self.fields[field].widget.attrs['class']='form-control'

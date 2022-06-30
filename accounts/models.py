@@ -34,16 +34,6 @@ class MyAccountManager(BaseUserManager):
         user.is_superadmin=True
         user.save()
         return user
-        
-SECTOR = (
-    ('West', 'West'),
-    ('East', 'East'),
-)
-
-ROLE = (
-    ('Doctor', 'Doctor'),
-)
-
 
 class Account(AbstractBaseUser):
     first_name = models.CharField(max_length=60)
@@ -80,16 +70,5 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, add_label):
         return True
 
-
-class Department(models.Model):
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)
-    ssn = models.IntegerField(unique=True, verbose_name='Social security number')
-    address = models.CharField(max_length=65, verbose_name='Home address')
-    salary = models.FloatField(default=0.0)
-    role = models.CharField(max_length=20, choices=ROLE)
-    sector = models.CharField(max_length=20, choices=SECTOR)
-
-    def __str__(self):
-        return f'{self.account.full_name()} {self.role} '
 
 

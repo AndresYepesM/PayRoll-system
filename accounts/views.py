@@ -9,8 +9,8 @@ from datetime import date
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib import messages, auth
 from django.db.models import Q
-from .models import Account, Department
-from .forms import UserRegistration, DesignateRole
+from .models import Account
+from .forms import UserRegistration
 
 
 # Login Function
@@ -66,34 +66,5 @@ def new_employee(request):
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
-    
-   
 
-@login_required(login_url='Home')
-def designate_role(request, user_id):
-    if request.user.is_admin:
-        user = get_object_or_404(Account, id=user_id)
-        if request.method == 'POST':
-            form = DesignateRole(request.POST, instance=user)
-            if form.is_valid():
-                data = Department()
-                data.account = user
-                data.ssn = form.cleaned_data['ssn']
-                data.address = form.cleaned_data['address']
-                data.salary = form.cleaned_data['salary']
-                data.role = form.cleaned_data['role']
-                data.sector = form.cleaned_data['sector']
-                data.save()
-                messages.success(request, 'New employee registed successfull')
-                return redirect('Home')
-        else:
-            form = DesignateRole(instance=user)
-
-        context = {
-            'form':form,
-        }
-        return render(request, 'accounts/designate_role.html', context)
-    else:
-        messages.error(request, 'Access Denied')
-        return redirect('Home')
 
