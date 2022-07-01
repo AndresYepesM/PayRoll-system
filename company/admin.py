@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Enterprise
+from .models import Enterprise, Employee, Position
 
 # Register your models here.
 class EnterpriseAdmin(admin.ModelAdmin):
@@ -9,4 +9,13 @@ class EnterpriseAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     list_filter = ()
 
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'phone')
+    list_display_links = ('full_name', 'email')
+    ordering = ('-id',)
+    filter_horizontal = ()
+    list_filter = ()
+
 admin.site.register(Enterprise, EnterpriseAdmin)
+admin.site.register(Employee, EmployeeAdmin)
+admin.site.register(Position)

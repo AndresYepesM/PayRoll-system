@@ -19,7 +19,7 @@ class Enterprise(models.Model):
         return f'{self.name} ---- {self.email}'
 
 class Position(models.Model):
-    enterprise = models.ForeignKey(Enterprise, on_delete=models.PROTECT, null=True)
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -37,4 +37,4 @@ class Employee(models.Model):
     role = models.OneToOneField(Position, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f'{self.id} name: {self.full_name},  company id: {enterprise.id}'
+        return f'{self.id} name: {self.full_name},  company id: {self.enterprise.id}'

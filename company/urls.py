@@ -8,4 +8,8 @@ from .views import *
 
 urlpatterns = [
     path('register_enterprise/', register_enterprise, name='register_enterprise'),
+
+    path('register_new_employee/', register_new_employee, name='register_new_employee'),
+
+    path('activation/<uidb64>/<token>/', activate, name='activate'),
 ]

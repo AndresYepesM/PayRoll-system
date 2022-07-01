@@ -1,0 +1,18 @@
+{% autoescape off %}
+
+    Hi {{user.first_name}} {{user.last_name}} nice to meet you!
+
+    Welcome to the PayRoll System, the {{enterprise.name}}, create this account for you to manage your
+    work time, and calculate your salary easy using this amazing tool, feel free to se your hours and all the information will bring for you
+    to get that information please confirm and activate your account using the link below:
+
+    http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+    Your account for PayRoll System is:
+    Account = {{user.email}}
+    Password = {{password}}
+
+    NOTE: Change your password to ona you feel secure and confortable to use. you can change using the Change password option on your account
+    
+{% endautoescape %}
+
