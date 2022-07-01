@@ -46,3 +46,25 @@ class EmployeeRegistration(forms.ModelForm):
         self.fields['role'].queryset = Position.objects.filter(enterprise=param.id)
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
+
+class EmployeeEdit(forms.ModelForm):
+
+    class Meta:
+
+        model = Employee
+
+        fields = {
+            'full_name',
+            'email',
+            'phone',
+            'salary',
+            'role',
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request= kwargs.pop('request', None)
+        super(EmployeeEdit, self).__init__(*args, **kwargs)
+        param = Enterprise.objects.get(account=self.request.user)
+        self.fields['role'].queryset = Position.objects.filter(enterprise=param.id)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'    

@@ -12,4 +12,10 @@ urlpatterns = [
     path('register_new_employee/', register_new_employee, name='register_new_employee'),
 
     path('activation/<uidb64>/<token>/', activate, name='activate'),
+
+    path('employee_list/', employee_list, name='employee_list'),
+
+    path('emplyee_edit/<int:employee_id>/', employee_edit, name='employee_edit'),
+
+    path('employee_access/<int:employee_id>/', employee_access, name='employee_access'),
 ]

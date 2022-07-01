@@ -15,7 +15,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-from .forms import RegisterEnterprise, EmployeeRegistration
+
+from .forms import RegisterEnterprise, EmployeeRegistration, EmployeeEdit
 from .models import Enterprise, Employee, Position
 from accounts.models import Account
 # Create your views here.
@@ -129,7 +130,7 @@ def register_new_employee(request):
 
         return render(request, 'enterprise/register_new_employee.html', context)
     else:
-        message.error(request, 'Access Denied')
+        messages.error(request, 'Access Denied')
         return redirect('Home')
 
 
@@ -148,4 +149,60 @@ def activate(request, uidb64, token):
         return redirect('Home')
     else:
         messages.error(request, 'Token is already been used')
+        return redirect('Home')
+
+
+@login_required(login_url='Home')
+def employee_list(request):
+    if request.user.is_admin or request.user.is_superadmin:
+        enterprise = Enterprise.objects.get(account=request.user.id)
+        employee = Employee.objects.filter(enterprise=enterprise.id)
+        context ={
+            'employee':employee,
+        }
+        return render(request, 'enterprise/employee_list.html', context)
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+
+
+@login_required(login_url='Home')
+def employee_edit(request, employee_id):
+    if request.user.is_admin or request.user.is_superadmin:
+        employee = Employee.objects.get(id=employee_id)
+        if request.method == 'POST':
+            form = EmployeeEdit(request.POST, instance=employee, request=request)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Employee Edit successful')
+                return redirect('employee_list')
+        else:
+            form = EmployeeEdit(instance=employee, request=request)
+
+        context = {
+            'form':form,
+        }
+        return render(request, 'enterprise/employee_edit.html', context)
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+
+@login_required(login_url='Home')
+def employee_access(request, employee_id):
+    if request.user.is_admin or reuqest.user.is_superadmin:
+        employee = get_object_or_404(Employee, id=employee_id)
+        user = get_object_or_404(Account, id=employee.account.id)
+        if user.is_active:
+            user.is_active = False
+            user.save()
+            messages.success(request, 'Employee account has been desactivate')
+            return redirect('employee_list')
+        else:
+            user.is_active = True
+            user.save()
+            messages.success(request, 'Employee account has been activate')
+            return redirect('employee_list')
+
+    else:
+        messages.error(request, 'Access Denied')
         return redirect('Home')

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 mx-auto mt-5">
+                <h4>List of employees</h4>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Full name</th>
+                            <th scope="col">Position</th>
+                            <th scope="col">Option</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if employee %}
+                            {% for i in employee %}
+                                <tr>
+                                    <th scope="row">{{i.id}}</th>
+                                    <td>{{i.full_name}}</td>
+                                    <td>{{i.role}}</td>
+                                    <td>
+                                        <a href="{% url 'employee_edit' employee_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit employee"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                        {% if i.account.is_active %}
+                                            <a href="{% url 'employee_access' employee_id=i.id %}" class="btn btn-dark text-light"data-bs-toggle="tooltip" data-bs-placement="top" title="Allow Access"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                                        {% else %}
+                                            <a href="{% url 'employee_access' employee_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete employee"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
+                                        {% endif %}
+                                        <a href="#" class="btn btn-danger text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete employee"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td>
+                                    No employee register
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
