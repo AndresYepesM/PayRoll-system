@@ -189,7 +189,7 @@ def employee_edit(request, employee_id):
 
 @login_required(login_url='Home')
 def employee_access(request, employee_id):
-    if request.user.is_admin or reuqest.user.is_superadmin:
+    if request.user.is_admin or request.user.is_superadmin:
         employee = get_object_or_404(Employee, id=employee_id)
         user = get_object_or_404(Account, id=employee.account.id)
         if user.is_active:
@@ -206,3 +206,15 @@ def employee_access(request, employee_id):
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
+
+@login_required(login_url='Home')
+def employee_delete(request, employee_id):
+    if request.user.is_admin or request.user.is_superadmin:
+        employee = get_object_or_404(Employee, id=employee_id)
+        user = get_object_or_404(Account, id=employee.account.id)
+        user.delete()
+        messages.success(request, 'Employee Deleted successfull')
+        return redirect('employee_list')
+    else:
+        messages.error(request, 'Access Denied')
+        return rediect('Home')
