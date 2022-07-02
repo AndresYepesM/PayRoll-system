@@ -16,7 +16,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
-from .forms import RegisterEnterprise, EmployeeRegistration, EmployeeEdit, CreatePosition
+from .forms import RegisterEnterprise, EmployeeRegistration, EmployeeEdit, PositionForm
 from .models import Enterprise, Employee, Position
 from accounts.models import Account
 # Create your views here.
@@ -175,18 +175,36 @@ def employee_list(request):
 def employee_edit(request, employee_id):
     if request.user.is_admin or request.user.is_superadmin:
         employee = Employee.objects.get(id=employee_id)
-        role = Position.objects.get(name=employee.role)
+
+        if employee.role == None:
+            role = None
+        else:
+            role = Position.objects.get(name=employee.role)
+
         if request.method == 'POST':
             form = EmployeeEdit(request.POST, instance=employee, request=request)
             if form.is_valid():
+
                 new_role = form.cleaned_data['role']
-                if new_role:
-                    role.counter -= 1
-                    role.save()
-                    queryset = Position.objects.get(name=new_role)
-                    queryset.counter += 1
-                    queryset.save()
-                form.save()
+
+                if role == new_role:
+                    form.save()
+                    messages.success(request, 'Employee Edit successful')
+                    return redirect('employee_list')
+                else:
+                    if role is None:
+                        queryset = Position.objects.get(name=new_role)
+                        queryset.counter += 1
+                        queryset.save()
+                        form.save()
+                    else:
+                        role.counter = role.counter - 1
+                        role.save()
+                        queryset = Position.objects.get(name=new_role)
+                        queryset.counter += 1
+                        queryset.save()
+                        form.save()
+
                 messages.success(request, 'Employee Edit successful')
                 return redirect('employee_list')
         else:
@@ -199,6 +217,7 @@ def employee_edit(request, employee_id):
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
+        
 
 @login_required(login_url='Home')
 def employee_access(request, employee_id):
@@ -250,21 +269,55 @@ def positions_create(request):
     if request.user.is_admin or request.user.is_superadmin:
         if request.method == 'POST':
             enterprise = Enterprise.objects.get(account=request.user.id)
-            form = CreatePosition(request.POST)
+            form = PositionForm(request.POST)
             if form.is_valid():
                 data = Position()
                 data.name = form.cleaned_data['name']
                 data.enterprise = enterprise
                 data.save()
                 messages.success(request, 'Your Role has been added successfully')
-                return redirect('Home')
+                return redirect('positions_list')
         else:
-            form = CreatePosition()
+            form = PositionForm()
 
         context ={
             'form':form,
         }
 
-        return render(request, 'enterprise/positions/positions_create.html', context)
+        return render(request, 'enterprise/positions/positions_form.html', context)
     else:
         messages.error(request, 'Access Denied')
+
+@login_required(login_url='Home')
+def positions_edit(request, position_id):
+    if request.user.is_admin or request.user.is_superadmin:
+        position = get_object_or_404(Position, id=position_id)
+        if request.method == 'POST':
+            form = PositionForm(request.POST, instance=position)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Role updated successfully')
+                return redirect('positions_list')
+        else:
+            form = PositionForm(instance=position)
+
+        context = {
+            'form':form,
+        }
+
+        return render(request, 'enterprise/positions/positions_form.html', context)
+    else:
+        messages.error(request, 'Acess Denied')
+        return redirect('Home')
+
+
+@login_required(login_url='Home')
+def positions_delete(request, position_id):
+    if request.user.is_admin or request.user.is_superadmin:
+        position = get_object_or_404(Position, id=position_id)
+        position.delete()
+        messages.success(request, 'Role Deleted sucessfull')
+        return redirect('positions_list')
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')

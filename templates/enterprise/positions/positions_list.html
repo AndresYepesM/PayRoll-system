@@ -22,9 +22,9 @@
                                 <td>{{i.name}}</td>
                                 <td>{{i.counter}}</td>
                                 <td>
-                                    <a href="#" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Role"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="{% url 'positions_edit' position_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Role"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <a href="#" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="List of employee of this role"><i class="fa fa-list" aria-hidden="true"></i></a>
-                                    <a href="#" onclick="return confirm('Are your surre you want to delete this employee?')" class="btn btn-danger text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Role"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    <a href="{% url 'positions_delete' position_id=i.id %}" onclick="return confirm('Are your surre you want to delete this employee?')" class="btn btn-danger text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Role"><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

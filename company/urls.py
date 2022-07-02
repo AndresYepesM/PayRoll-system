@@ -24,4 +24,8 @@ urlpatterns = [
     path('positions/', positions_list, name='positions_list'),
 
     path('positions/create', positions_create, name='positions_create'),
+
+    path('positions/edit/<int:position_id>/', positions_edit, name='positions_edit'),
+
+    path('positions/delete/<int:position_id>/', positions_delete, name='positions_delete'),
 ]

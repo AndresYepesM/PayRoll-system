@@ -66,10 +66,11 @@ class EmployeeEdit(forms.ModelForm):
         super(EmployeeEdit, self).__init__(*args, **kwargs)
         param = Enterprise.objects.get(account=self.request.user)
         self.fields['role'].queryset = Position.objects.filter(enterprise=param.id)
+        self.fields['role'].required= False
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'    
 
-class CreatePosition(forms.ModelForm):
+class PositionForm(forms.ModelForm):
 
     class Meta:
 
@@ -80,5 +81,5 @@ class CreatePosition(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(CreatePosition, self).__init__(*args, **kwargs)
+        super(PositionForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
