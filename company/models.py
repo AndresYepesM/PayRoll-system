@@ -21,6 +21,7 @@ class Enterprise(models.Model):
 class Position(models.Model):
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
+    counter = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.name}'
@@ -34,7 +35,7 @@ class Employee(models.Model):
     phone = models.CharField(max_length=35)
     ssn = models.IntegerField(unique=True)
     salary = models.FloatField()
-    role = models.OneToOneField(Position, on_delete=models.PROTECT)
+    role = models.ForeignKey(Position, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.id} name: {self.full_name},  company id: {self.enterprise.id}'

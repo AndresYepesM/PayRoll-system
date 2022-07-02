@@ -90,6 +90,11 @@ def register_new_employee(request):
                 employee.salary = form.cleaned_data['salary']
                 employee.role = form.cleaned_data['role']
 
+                # Add to Counter
+                role = Position.objects.get(name=employee.role)
+                role.counter += 1
+                role.save()
+
                 # Employee Account information
                 username = employee.email.split('@')[0]
                 first_name = employee.full_name.split(' ')[0]
@@ -218,3 +223,16 @@ def employee_delete(request, employee_id):
     else:
         messages.error(request, 'Access Denied')
         return rediect('Home')
+
+@login_required(login_url='Home')
+def positions_list(request):
+    if request.user.is_admin or request.user.is_superuser:
+        enterprise = Enterprise.objects.get(account=request.user.id)
+        positions = Position.objects.filter(enterprise=enterprise)
+        context ={
+            'positions':positions,
+        }
+        return render(request, 'enterprise/positions/positions_list.html', context)
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
