@@ -28,4 +28,6 @@ urlpatterns = [
     path('positions/edit/<int:position_id>/', positions_edit, name='positions_edit'),
 
     path('positions/delete/<int:position_id>/', positions_delete, name='positions_delete'),
+
+    path('positions/employees/<int:position_id>/', positions_employees, name='positions_employees'),
 ]

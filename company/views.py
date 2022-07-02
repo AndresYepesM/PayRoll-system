@@ -217,7 +217,7 @@ def employee_edit(request, employee_id):
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
-        
+
 
 @login_required(login_url='Home')
 def employee_access(request, employee_id):
@@ -264,6 +264,7 @@ def positions_list(request):
         messages.error(request, 'Access Denied')
         return redirect('Home')
 
+
 @login_required(login_url='Home')
 def positions_create(request):
     if request.user.is_admin or request.user.is_superadmin:
@@ -287,6 +288,7 @@ def positions_create(request):
         return render(request, 'enterprise/positions/positions_form.html', context)
     else:
         messages.error(request, 'Access Denied')
+
 
 @login_required(login_url='Home')
 def positions_edit(request, position_id):
@@ -318,6 +320,20 @@ def positions_delete(request, position_id):
         position.delete()
         messages.success(request, 'Role Deleted sucessfull')
         return redirect('positions_list')
+    else:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+
+
+@login_required(login_url='Home')
+def positions_employees(request, position_id):
+    if request.user.is_admin or request.user.is_superadmin:
+        employees = Employee.objects.filter(role=position_id)
+        context = {
+            'employees':employees
+        }
+
+        return render(request, 'enterprise/positions/employees_possitions.html', context)
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
