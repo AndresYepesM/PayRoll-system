@@ -6,7 +6,7 @@ class RegisterEnterprise(forms.ModelForm):
     class Meta:
         model = Enterprise
 
-        fields ={
+        fields =[
             'name',
             'email',
             'phone',
@@ -16,7 +16,7 @@ class RegisterEnterprise(forms.ModelForm):
             'city',
             'country',
             'zipcode',
-        }
+        ]
 
     def __init__(self, *args, **kwargs):
         super(RegisterEnterprise, self).__init__(*args, **kwargs)
@@ -30,14 +30,14 @@ class EmployeeRegistration(forms.ModelForm):
         
         model = Employee
 
-        fields ={
+        fields =[
             'full_name',
             'email',
             'phone',
             'ssn',
             'salary', 
             'role',
-        }
+        ]
 
     def __init__(self, *args, **kwargs):
         self.request= kwargs.pop('request', None)
@@ -53,13 +53,13 @@ class EmployeeEdit(forms.ModelForm):
 
         model = Employee
 
-        fields = {
+        fields = [
             'full_name',
             'email',
             'phone',
             'salary',
             'role',
-        }
+        ]
 
     def __init__(self, *args, **kwargs):
         self.request= kwargs.pop('request', None)
@@ -68,3 +68,17 @@ class EmployeeEdit(forms.ModelForm):
         self.fields['role'].queryset = Position.objects.filter(enterprise=param.id)
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'    
+
+class CreatePosition(forms.ModelForm):
+
+    class Meta:
+
+        model = Position
+
+        fields = [
+            'name',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(CreatePosition, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'form-control'

@@ -17,12 +17,12 @@ class UserRegistration(forms.ModelForm):
 
         model = Account
 
-        fields={
+        fields=[
             'first_name',
             'last_name',
             'email',
             'phone',
-        }
+        ]
     
     def __init__(self, *args, **kwargs):
         super(UserRegistration, self).__init__(*args, **kwargs)

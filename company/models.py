@@ -35,7 +35,7 @@ class Employee(models.Model):
     phone = models.CharField(max_length=35)
     ssn = models.IntegerField(unique=True)
     salary = models.FloatField()
-    role = models.ForeignKey(Position, on_delete=models.CASCADE)
+    role = models.ForeignKey(Position, on_delete=models.PROTECT)
 
     def __str__(self):
         return f'{self.id} name: {self.full_name},  company id: {self.enterprise.id}'

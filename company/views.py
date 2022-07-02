@@ -16,7 +16,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
-from .forms import RegisterEnterprise, EmployeeRegistration, EmployeeEdit
+from .forms import RegisterEnterprise, EmployeeRegistration, EmployeeEdit, CreatePosition
 from .models import Enterprise, Employee, Position
 from accounts.models import Account
 # Create your views here.
@@ -236,3 +236,27 @@ def positions_list(request):
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
+
+@login_required(login_url='Home')
+def positions_create(request):
+    if request.user.is_admin or request.user.is_superadmin:
+        if request.method == 'POST':
+            enterprise = Enterprise.objects.get(account=request.user.id)
+            form = CreatePosition(request.POST)
+            if form.is_valid():
+                data = Position()
+                data.name = form.cleaned_data['name']
+                data.enterprise = enterprise
+                data.save()
+                messages.success(request, 'Your Role has been added successfully')
+                return redirect('Home')
+        else:
+            form = CreatePosition()
+
+        context ={
+            'form':form,
+        }
+
+        return render(request, 'enterprise/positions/positions_create.html', context)
+    else:
+        messages.error(request, 'Access Denied')
