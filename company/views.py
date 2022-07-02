@@ -175,9 +175,17 @@ def employee_list(request):
 def employee_edit(request, employee_id):
     if request.user.is_admin or request.user.is_superadmin:
         employee = Employee.objects.get(id=employee_id)
+        role = Position.objects.get(name=employee.role)
         if request.method == 'POST':
             form = EmployeeEdit(request.POST, instance=employee, request=request)
             if form.is_valid():
+                new_role = form.cleaned_data['role']
+                if new_role:
+                    role.counter -= 1
+                    role.save()
+                    queryset = Position.objects.get(name=new_role)
+                    queryset.counter += 1
+                    queryset.save()
                 form.save()
                 messages.success(request, 'Employee Edit successful')
                 return redirect('employee_list')
