@@ -77,63 +77,69 @@ def register_enterprise(request):
 def register_new_employee(request):
     if request.user.is_admin or request.user.is_superadmin:
         enterprise = Enterprise.objects.get(account=request.user)
-        if request.method == 'POST':
-            form = EmployeeRegistration(request.POST, request=request)
-            if form.is_valid():
-                employee = Employee()
+        positions = Position.objects.filter(enterprise=enterprise).count()
+        if positions == 0:
+            messages.info(request, 'First you need to add roles to add new employees')
+            return redirect('positions_create')
 
-                # Employee Information
-                employee.full_name = form.cleaned_data['full_name']
-                employee.email = form.cleaned_data['email']
-                employee.phone = form.cleaned_data['phone']
-                employee.ssn = form.cleaned_data['ssn']
-                employee.salary = form.cleaned_data['salary']
-                employee.role = form.cleaned_data['role']
-
-                # Add to Counter
-                role = Position.objects.get(name=employee.role)
-                role.counter += 1
-                role.save()
-
-                # Employee Account information
-                username = employee.email.split('@')[0]
-                first_name = employee.full_name.split(' ')[0]
-                last_name =  employee.full_name.split(' ')[1]
-                password = hash(employee.email)
-                user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=employee.email, password=str(password))
-                user.phone = employee.phone
-                user.save()
-                employee.account = user
-                employee.enterprise = enterprise
-                employee.save()
-                
-
-                current_site = get_current_site(request)
-                mail_subject = 'This is a activation Email'
-                message = render_to_string('accounts/verification_email.html',{
-                    'user':user,
-                    'enterprise':enterprise,
-                    'domain':current_site,
-                    'password':password,
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token':default_token_generator.make_token(user),
-
-                })
-
-                to_email = employee.email
-                send_email = EmailMessage(mail_subject, message, to=[to_email])
-                send_email.send()
-
-                messages.success(request, 'Your new employee is create and the verification email was send')
-                return redirect('Home')
         else:
-            form = EmployeeRegistration(request=request)
+            if request.method == 'POST':
+                form = EmployeeRegistration(request.POST, request=request)
+                if form.is_valid():
+                    employee = Employee()
 
-        context = {
-            'form':form,
-        }
+                    # Employee Information
+                    employee.full_name = form.cleaned_data['full_name']
+                    employee.email = form.cleaned_data['email']
+                    employee.phone = form.cleaned_data['phone']
+                    employee.ssn = form.cleaned_data['ssn']
+                    employee.salary = form.cleaned_data['salary']
+                    employee.role = form.cleaned_data['role']
 
-        return render(request, 'enterprise/register_new_employee.html', context)
+                    # Add to Counter
+                    role = Position.objects.get(name=employee.role)
+                    role.counter += 1
+                    role.save()
+
+                    # Employee Account information
+                    username = employee.email.split('@')[0]
+                    first_name = employee.full_name.split(' ')[0]
+                    last_name =  employee.full_name.split(' ')[1]
+                    password = hash(employee.email)
+                    user = Account.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=employee.email, password=str(password))
+                    user.phone = employee.phone
+                    user.save()
+                    employee.account = user
+                    employee.enterprise = enterprise
+                    employee.save()
+                    
+
+                    current_site = get_current_site(request)
+                    mail_subject = 'This is a activation Email'
+                    message = render_to_string('accounts/verification_email.html',{
+                        'user':user,
+                        'enterprise':enterprise,
+                        'domain':current_site,
+                        'password':password,
+                        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token':default_token_generator.make_token(user),
+
+                    })
+
+                    to_email = employee.email
+                    send_email = EmailMessage(mail_subject, message, to=[to_email])
+                    send_email.send()
+
+                    messages.success(request, 'Your new employee is create and the verification email was send')
+                    return redirect('Home')
+            else:
+                form = EmployeeRegistration(request=request)
+
+            context = {
+                'form':form,
+            }
+
+            return render(request, 'enterprise/register_new_employee.html', context)
     else:
         messages.error(request, 'Access Denied')
         return redirect('Home')
@@ -244,6 +250,9 @@ def employee_delete(request, employee_id):
     if request.user.is_admin or request.user.is_superadmin:
         employee = get_object_or_404(Employee, id=employee_id)
         user = get_object_or_404(Account, id=employee.account.id)
+        role = Position.objects.get(enterprise=employee.enterprise)
+        role.counter  -= 1
+        role.save()
         user.delete()
         messages.success(request, 'Employee Deleted successfull')
         return redirect('employee_list')
