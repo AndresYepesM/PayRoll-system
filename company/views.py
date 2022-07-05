@@ -250,7 +250,7 @@ def employee_delete(request, employee_id):
     if request.user.is_admin or request.user.is_superadmin:
         employee = get_object_or_404(Employee, id=employee_id)
         user = get_object_or_404(Account, id=employee.account.id)
-        role = Position.objects.get(enterprise=employee.enterprise)
+        role = Position.objects.get(name=employee.role)
         role.counter  -= 1
         role.save()
         user.delete()
