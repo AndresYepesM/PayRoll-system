@@ -1,30 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container-fluid mt-5">
     <div class="row">
-        <div class="col-md-9 mx-auto mt-5">
-            <h4>List of roles availables in your company</h4>
-            <hr>
+        <div class="col-md-8 mx-auto">
+            <nav class="navbar navbar-expand-lg bg-secondary rounded">
+                <div class="container-fluid">
+                    <h2 class="navbar-brand text-light">Manage Roles</h2>
+                
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+                    <div class="d-flex" role="search">
+                        <a class="btn btn-success" href="{% url 'positions_create' %}">Add New Role</a>
+                    </div>
+        
+                </div>
+            </nav>
+
             <table class="table">
                 <thead>
-                    <tr>
-                        <th scope="col">Full name</th>
-                        <th scope="col">Count</th>
-                        <th scope="col">Option</th>
+                    <tr class="text-center">
+                        <th scope="col">Name</th>
+                        <th scope="col">Count of employees</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="table-group-divider">
                     {% if positions %}
                         {% for i in positions %}
-                            <tr>
-                                <td>{{i.name}}</td>
+                            <tr class="text-center">
+                                <th scope="row">{{i.name}}</th>
                                 <td>{{i.counter}}</td>
                                 <td>
-                                    <a href="{% url 'positions_edit' position_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Role"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                    <a href="{% url 'positions_employees' position_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="List of employee of this role"><i class="fa fa-list" aria-hidden="true"></i></a>
-                                    <a href="{% url 'positions_delete' position_id=i.id %}" onclick="return confirm('Are your surre you want to delete this employee?')" class="btn btn-danger text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Role"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    <a href="{% url 'positions_edit' position_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit employee"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="{% url 'positions_delete' position_id=i.id %}" onclick="return confirm('Are your surre you want to delete this role?')" class="btn btn-danger text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete employee"><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

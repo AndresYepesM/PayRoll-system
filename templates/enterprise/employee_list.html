@@ -2,32 +2,47 @@
 
 {% block content %}
 
-    <div class="container mt-5">
+    <div class="container-fluid mt-5">
         <div class="row">
-            <div class="col-md-9 mx-auto mt-5">
-                <h4>List of employees</h4>
-                <hr>
+            <div class="col-md-8 mx-auto">
+                <nav class="navbar navbar-expand-lg bg-secondary rounded">
+                    <div class="container-fluid">
+                        <h2 class="navbar-brand text-light">Manage Employees</h2>
+                    
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+                        <div class="d-flex" role="search">
+                            <a class="btn btn-success" href="{% url 'register_new_employee' %}">Add New Role</a>
+                        </div>
+            
+                    </div>
+                </nav>
+
                 <table class="table">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th scope="col">ID</th>
-                            <th scope="col">Full name</th>
-                            <th scope="col">Position</th>
-                            <th scope="col">Option</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Phoner</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody class="table-group-divider ">
                         {% if employee %}
                             {% for i in employee %}
-                                <tr>
+                                <tr class="text-center">
                                     <th scope="row">{{i.id}}</th>
                                     <td>{{i.full_name}}</td>
+                                    <td>{{i.account.email}}</td>
+                                    <td>{{i.phone}}</td>
                                     <td>{{i.role}}</td>
                                     <td>
                                         <a href="{% url 'employee_edit' employee_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit employee"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                         {% if i.account.is_active %}
-                                            <a href="{% url 'employee_access' employee_id=i.id %}" class="btn btn-dark text-light"data-bs-toggle="tooltip" data-bs-placement="top" title="Deactivate"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                                            <a href="{% url 'employee_access' employee_id=i.id %}" class="btn btn-dark text-light"data-bs-toggle="tooltip" data-bs-placement="top" title="Deactivate"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                                         {% else %}
                                             <a href="{% url 'employee_access' employee_id=i.id %}" class="btn btn-dark text-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Activate"><i class="fa fa-check-circle" aria-hidden="true"></i></a>
                                         {% endif %}
@@ -47,5 +62,6 @@
             </div>
         </div>
     </div>
+
 
 {% endblock %}

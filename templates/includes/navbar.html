@@ -9,27 +9,13 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if request.user.is_authenticated %}
                     {% if request.user.is_admin %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Employee
-                        </a>
+                        <li class="nav-item">
+                            <li><a class="nav-link" href="{% url 'employee_list' %}">List of Employees</a></li>
+                        </li>
 
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'employee_list' %}">List of Employees</a></li>
-                            <li><a class="dropdown-item" href="{% url 'register_new_employee' %}">Create a new employee</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Roles
-                        </a>
-
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'positions_list' %}">List of Roles</a></li>
-                            <li><a class="dropdown-item" href="{% url 'positions_create' %}">Create a new Role</a></li>
-                        </ul>
-                    </li>
+                        <li class="nav-item">
+                            <li><a class="nav-link" href="{% url 'positions_list' %}">List of Roles</a></li>
+                        </li>
                     {% endif %}
                 {% else %}
 
