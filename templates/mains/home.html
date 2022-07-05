@@ -2,5 +2,77 @@
 
 {% block content %}
 
+{% if request.user.is_admin or request.user.is_superadmin %}
+
+{% else %}
+    {% if request.user.is_authenticated %}
+        <div class="container-fluid mt-5">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card mt-4">
+                        <div class="card-header text-center">
+                        Today is, {% now "jS F Y" %}
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="fs-1" id="clock" onload="currentTime()"></div>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function currentTime() {
+            let date = new Date(); 
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
+        
+            if(hh === 0){
+                hh = 12;
+            }
+            if(hh > 12){
+                hh = hh - 12;
+                session = "PM";
+            }
+        
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;function currentTime() {
+            let date = new Date(); 
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
+        
+            if(hh === 0){
+                hh = 12;
+            }
+            if(hh > 12){
+                hh = hh - 12;
+                session = "PM";
+            }
+        
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;
+            ss = (ss < 10) ? "0" + ss : ss;
+            
+            let time = hh + ":" + mm + ":" + ss + " " + session;
+        
+            document.getElementById("clock").innerText = time; 
+            let t = setTimeout(function(){ currentTime() }, 1000);
+        }
+        
+        currentTime();
+        
+            document.getElementById("clock").innerText = time; 
+            let t = setTimeout(function(){ currentTime() }, 1000);
+        }
+        
+        currentTime();
+        </script>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

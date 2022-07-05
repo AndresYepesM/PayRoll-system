@@ -262,7 +262,7 @@ def employee_delete(request, employee_id):
 
 @login_required(login_url='Home')
 def positions_list(request):
-    if request.user.is_admin or request.user.is_superuser:
+    if request.user.is_admin or request.user.is_superadmin:
         enterprise = Enterprise.objects.get(account=request.user.id)
         positions = Position.objects.filter(enterprise=enterprise)
         context ={
