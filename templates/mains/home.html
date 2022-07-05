@@ -16,6 +16,29 @@
                         <div class="card-body text-center">
                             <div class="fs-1" id="clock" onload="currentTime()"></div>
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                {% if check %}
+
+                                    {% if not timecard.lunch_out %}
+
+                                        {% if not timecard.lunch_in %}
+                                            <a href="#" class="btn btn-success">Start Lunch</a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-secondary">End Lunch</a>
+                                        {% endif %}
+                                    {% elif timecard.lunch_out %}
+                                        {% if not timecard.clock_out %}
+                                            <a href="#" class="btn btn-secondary">Clock Out</a>
+                                        {% else %}
+                                            <button class="btn btn-primary" disabled="disabled">Your done for today, Have a greate Day</button>
+                                        {% endif %}
+                                    {% endif %}
+                                        
+                                {% else %}
+                                    <a href="{% url 'clock_in' %}" class="btn btn-primary">Clock In</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

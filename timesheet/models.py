@@ -3,13 +3,13 @@ from company.models import Employee
 # Create your models here.
 
 class Timecard(models.Model):
-    employeee =  models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee =  models.ForeignKey(Employee, on_delete=models.CASCADE)
     day = models.DateField(auto_now_add=True)
-    clock_in = models.DateTimeField(blank=True)
-    lunch_in = models.DateTimeField(blank=True)
-    lunch_out = models.DateTimeField(blank=True)
-    clock_out = models.DateTimeField(blank=True)
-    total = models.IntegerField()
+    clock_in = models.TimeField()
+    lunch_in = models.TimeField(blank=True, null=True)
+    lunch_out = models.TimeField(blank=True, null=True)
+    clock_out = models.TimeField(blank=True, null=True)
+    total = models.IntegerField(null=True)
 
     def __str__(self):
-        return f'{self.day}'
+        return f'{self.day} -- {self.employee.full_name} -- {self.employee.enterprise}'

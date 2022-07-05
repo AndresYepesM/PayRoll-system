@@ -7,4 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .views import *
 
 urlpatterns = [
+
+    path('clock/in', clock_in, name='clock_in'),
+
 ]
