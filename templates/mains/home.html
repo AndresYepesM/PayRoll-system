@@ -23,13 +23,13 @@
                                     {% if not timecard.lunch_out %}
 
                                         {% if not timecard.lunch_in %}
-                                            <a href="#" class="btn btn-success">Start Lunch</a>
+                                            <a href="{% url 'lunch_in_out' %}" class="btn btn-success">Start Lunch</a>
                                         {% else %}
-                                            <a href="#" class="btn btn-secondary">End Lunch</a>
+                                            <a href="{% url 'lunch_in_out' %}" class="btn btn-secondary">End Lunch</a>
                                         {% endif %}
                                     {% elif timecard.lunch_out %}
                                         {% if not timecard.clock_out %}
-                                            <a href="#" class="btn btn-secondary">Clock Out</a>
+                                            <a href="{% url 'clock_out' %}" class="btn btn-secondary">Clock Out</a>
                                         {% else %}
                                             <button class="btn btn-primary" disabled="disabled">Your done for today, Have a greate Day</button>
                                         {% endif %}

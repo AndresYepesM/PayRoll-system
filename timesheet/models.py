@@ -9,7 +9,7 @@ class Timecard(models.Model):
     lunch_in = models.TimeField(blank=True, null=True)
     lunch_out = models.TimeField(blank=True, null=True)
     clock_out = models.TimeField(blank=True, null=True)
-    total = models.IntegerField(null=True)
+    total = models.DecimalField(null=True, max_digits=5, decimal_places=2)
 
     def __str__(self):
         return f'{self.day} -- {self.employee.full_name} -- {self.employee.enterprise}'

@@ -10,4 +10,7 @@ urlpatterns = [
 
     path('clock/in', clock_in, name='clock_in'),
 
+    path('lunch/in/out', lunch_in_out, name='lunch_in_out'),
+
+    path('clock/out', clock_out, name='clock_out'),
 ]

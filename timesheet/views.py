@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from datetime import date
 from datetime import datetime
+import datetime as dt
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib import messages, auth
 from django.db.models import Q
@@ -40,3 +41,45 @@ def clock_in(request):
             data.save()
             messages.success(request, 'Clock In successfull')
             return redirect('Home')
+
+
+@login_required(login_url='Home')
+def lunch_in_out(request):
+    if request.user.is_admin or request.user.is_superadmin:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+    else:
+        employee = Employee.objects.get(account=request.user)
+        current_date = date.today()
+        timecard = Timecard.objects.get(Q(employee__account=request.user) and Q(day=current_date))
+
+        if not timecard.lunch_in:
+            timecard.lunch_in = datetime.now().strftime("%H:%M:%S")
+            timecard.save()
+            messages.success(request, 'Lunch start, Enjoy your meal')
+            return redirect('Home')
+        else:
+            timecard.lunch_out = datetime.now().strftime("%H:%M:%S")
+            timecard.save()
+            messages.success(request, 'End of lunch, good luck')
+            return redirect('Home')
+
+@login_required(login_url='Home')
+def clock_out(request):
+
+    if request.user.is_admin or request.user.is_superadmin:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+    else:
+        employee = Employee.objects.get(account=request.user)
+        current_date = date.today()
+        timecard = Timecard.objects.get(Q(employee__account=request.user) and Q(day=current_date))
+        timecard.clock_out = datetime.now().strftime("%H:%M:%S")
+
+        t1 = datetime.strptime(f'{timecard.lunch_in}', "%H:%M:%S") - datetime.strptime(f'{timecard.clock_in}', "%H:%M:%S")
+        t2 = datetime.strptime(f'{timecard.clock_out}', "%H:%M:%S") - datetime.strptime(f'{timecard.lunch_out}', "%H:%M:%S")
+        x = t2 + t1
+        timecard.total = (x.seconds) / 3600
+        timecard.save()
+        messages.success(request, 'Clock out successful, Have a good day')
+        return redirect('Home')
