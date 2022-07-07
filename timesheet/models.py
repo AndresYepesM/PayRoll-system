@@ -4,7 +4,7 @@ from company.models import Employee
 
 class Timecard(models.Model):
     employee =  models.ForeignKey(Employee, on_delete=models.CASCADE)
-    day = models.DateField(auto_now_add=True)
+    day = models.DateField()
     clock_in = models.TimeField()
     lunch_in = models.TimeField(blank=True, null=True)
     lunch_out = models.TimeField(blank=True, null=True)

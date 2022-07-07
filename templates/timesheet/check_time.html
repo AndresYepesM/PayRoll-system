@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-9 mx-auto">
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col">Date</th>
+                        <th scope="col">Clock in</th>
+                        <th scope="col">Lunch Start</th>
+                        <th scope="col">Lunch End</th>
+                        <th scope="col">Clock Out</th>
+                        <th scope="col">Toal of Hrs</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in timecard %}
+                        <tr class="text-center">
+                            <th scope="row">{{item.day}}</th>
+                            <td>{{item.clock_in}}</td>
+                            <td>{{item.lunch_in}}</td>
+                            <td>{{item.lunch_out}}</td>
+                            <td>{{item.clock_out}}</td>
+                            <td>{{item.total}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>  
+{% endblock %}

@@ -13,4 +13,6 @@ urlpatterns = [
     path('lunch/in/out', lunch_in_out, name='lunch_in_out'),
 
     path('clock/out', clock_out, name='clock_out'),
+
+    path('my/timesheet/', timesheet, name='timesheet'),
 ]

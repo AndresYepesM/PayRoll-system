@@ -8,6 +8,7 @@ from django.views import generic
 from datetime import date
 from datetime import datetime
 import datetime as dt
+import calendar
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib import messages, auth
 from django.db.models import Q
@@ -61,7 +62,7 @@ def lunch_in_out(request):
         else:
             timecard.lunch_out = datetime.now().strftime("%H:%M:%S")
             timecard.save()
-            messages.success(request, 'End of lunch, good luck')
+            messages.success(request, 'End of lunch.')
             return redirect('Home')
 
 @login_required(login_url='Home')
@@ -83,3 +84,19 @@ def clock_out(request):
         timecard.save()
         messages.success(request, 'Clock out successful, Have a good day')
         return redirect('Home')
+
+
+@login_required(login_url='Home')
+def timesheet(request):
+
+    if request.user.is_admin or request.user.is_superadmin:
+        messages.error(request, 'Access Denied')
+        return redirect('Home')
+    else:
+        timecard = Timecard.objects.filter(employee__account=request.user).order_by('day')
+
+        context ={
+            'timecard':timecard,
+        }
+
+        return render(request, 'timesheet/check_time.html', context)
